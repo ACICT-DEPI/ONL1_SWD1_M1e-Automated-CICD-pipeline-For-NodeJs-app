@@ -1,3 +1,4 @@
+```groovy
 pipeline {
     agent any
 
@@ -12,9 +13,9 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh """
-                        docker build . -f dockerfile -t toba44/react-iti.10
+                        docker build . -f dockerfile -t toba44/docker-js
                         docker login -u ${USERNAME} -p ${PASSWORD}
-                        docker push toba44/react-iti.10
+                        docker push toba44/docker-js
                     """
                 }
             }
