@@ -6,7 +6,7 @@ pipeline {
         stage('Preparation') {
             steps {
                 // Get some code from a GitHub repository
-                git branch: 'main',  url: 'https://github.com/Alien166/Dockerizing-React-App-Project.git'
+                git branch: 'main',  url: 'https://github.com/Alien166/Automated-Deployment-Pipeline.git'
             }
         }
         stage('CI') {
