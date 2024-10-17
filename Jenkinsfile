@@ -1,12 +1,11 @@
-```groovy
 pipeline {
-    agent any
+    agent {label 'ec2'}
 
     stages {
         stage('Preparation') {
             steps {
-                // Get some code from a GitHub repository
-                git branch: 'main',  url: 'https://github.com/Alien166/Automated-Deployment-Pipeline.git'
+                // Clone the code repository
+                git branch: 'main', url: 'https://github.com/Alien166/Automated-Deployment-Pipeline.git'
             }
         }
         stage('CI') {
@@ -22,19 +21,11 @@ pipeline {
         }
         stage('CD') {
             steps {
+                // Use Ansible to deploy the container
                 sh """
-                    docker run -d -p 3000:3000 toba44/react-iti.10
-                """
+                   ansible-playbook -i Ansible/inventory Ansible/site.yml -u ec2-user 
+                  """
             }
-        }
-    }
-
-    post {
-        success {
-            slackSend(channel: 'jenkins', message: "Pipeline '${env.JOB_NAME}' (${env.BUILD_NUMBER}) completed successfully! :tada:\nBuild URL: ${env.BUILD_URL}")
-        }
-        failure {
-            slackSend(channel: 'jenkins', message: "Pipeline '${env.JOB_NAME}' (${env.BUILD_NUMBER}) failed. :x:\nBuild URL: ${env.BUILD_URL}")
         }
     }
 }
